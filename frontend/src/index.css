@@ -1,0 +1,146 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* =========================================================================
+   HiringBuddy design tokens
+   Burnt-orange brand · dark is the default · light + system supported.
+   Colors are stored as raw "R G B" channels so Tailwind's <alpha-value>
+   (e.g. bg-primary/20) works everywhere.
+   ========================================================================= */
+@layer base {
+  :root,
+  .dark {
+    color-scheme: dark;
+
+    --bg: 11 11 15;             /* page background            #0B0B0F */
+    --surface: 20 20 27;        /* cards / panels             #14141B */
+    --surface-2: 28 28 37;      /* muted / inset              #1C1C25 */
+    --surface-3: 39 39 51;      /* hover / raised             #272733 */
+    --overlay: 6 6 9;           /* modal scrim base           */
+
+    --border: 39 39 50;         /* hairline borders           */
+    --border-strong: 60 60 74;  /* emphasized borders         */
+
+    --content: 244 244 246;     /* primary text               #F4F4F6 */
+    --content-muted: 161 161 174;
+    --content-subtle: 112 112 126;
+
+    --primary: 234 88 12;       /* burnt orange               #EA580C */
+    --primary-hover: 249 115 22;/* brighter on hover in dark  #F97316 */
+    --primary-active: 194 65 12;/*                            #C2410C */
+    --primary-fg: 255 255 255;  /* text on primary            */
+    --primary-subtle: 67 25 11; /* tinted brand background    */
+
+    --success: 34 197 94;   --success-fg: 255 255 255;
+    --warning: 234 179 8;   --warning-fg: 28 22 4;
+    --danger: 239 68 68;    --danger-fg: 255 255 255;
+    --info: 56 130 246;     --info-fg: 255 255 255;
+
+    --ring: 234 88 12;
+    --radius: 0.75rem;
+  }
+
+  .light {
+    color-scheme: light;
+
+    --bg: 255 253 249;          /* warm off-white             #FFFDF9 */
+    --surface: 255 255 255;
+    --surface-2: 248 246 241;
+    --surface-3: 241 238 231;
+    --overlay: 24 24 27;
+
+    --border: 231 227 219;
+    --border-strong: 214 209 199;
+
+    --content: 24 24 27;        /*                            #18181B */
+    --content-muted: 82 82 91;
+    --content-subtle: 120 120 130;
+
+    --primary: 234 88 12;
+    --primary-hover: 194 65 12; /* darker on hover in light   */
+    --primary-active: 154 52 18;
+    --primary-fg: 255 255 255;
+    --primary-subtle: 255 237 213; /* orange-100              #FFEDD5 */
+
+    --success: 22 163 74;   --success-fg: 255 255 255;
+    --warning: 202 138 4;   --warning-fg: 255 255 255;
+    --danger: 220 38 38;    --danger-fg: 255 255 255;
+    --info: 37 99 235;      --info-fg: 255 255 255;
+
+    --ring: 234 88 12;
+  }
+
+  * {
+    border-color: rgb(var(--border));
+  }
+
+  html {
+    -webkit-text-size-adjust: 100%;
+    scrollbar-color: rgb(var(--border-strong)) transparent;
+  }
+
+  body {
+    @apply bg-bg text-content font-sans antialiased;
+    min-height: 100vh;
+  }
+
+  ::selection {
+    background-color: rgb(var(--primary) / 0.28);
+    color: rgb(var(--content));
+  }
+
+  /* Themed scrollbars */
+  *::-webkit-scrollbar { width: 10px; height: 10px; }
+  *::-webkit-scrollbar-track { background: transparent; }
+  *::-webkit-scrollbar-thumb {
+    background: rgb(var(--border-strong));
+    border-radius: 9999px;
+    border: 2px solid transparent;
+    background-clip: content-box;
+  }
+  *::-webkit-scrollbar-thumb:hover { background: rgb(var(--content-subtle)); }
+
+  /* Guarded, professional theme cross-fade — only applied during a switch. */
+  .theme-transition,
+  .theme-transition *,
+  .theme-transition *::before,
+  .theme-transition *::after {
+    transition:
+      background-color 0.25s ease,
+      border-color 0.25s ease,
+      color 0.25s ease,
+      fill 0.25s ease,
+      stroke 0.25s ease !important;
+    transition-delay: 0 !important;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+
+/* Reusable primitive utilities used across the design system. */
+@layer components {
+  .skeleton {
+    @apply relative overflow-hidden rounded-md bg-surface-2;
+  }
+  .skeleton::after {
+    content: "";
+    @apply absolute inset-0 -translate-x-full animate-shimmer;
+    background-image: linear-gradient(
+      90deg,
+      transparent,
+      rgb(var(--content) / 0.06),
+      transparent
+    );
+  }
+
+  .focus-ring {
+    @apply outline-none ring-offset-2 ring-offset-bg focus-visible:ring-2 focus-visible:ring-primary;
+  }
+}

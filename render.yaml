@@ -1,0 +1,24 @@
+# Render blueprint for the HiringBuddy API.
+# Deploy: connect the repo in Render and it will read this file.
+services:
+  - type: web
+    name: hiringbuddy-api
+    runtime: python
+    rootDir: backend
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn main:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /
+    envVars:
+      - key: AI_PROVIDER
+        value: groq
+      - key: GROQ_API_KEY
+        sync: false          # set in the Render dashboard (secret)
+      - key: SECRET_KEY
+        generateValue: true  # Render generates a strong secret
+      - key: FRONTEND_URL
+        sync: false          # e.g. https://hiringbuddy.vercel.app
+      - key: DATABASE_URL
+        sync: false          # optional: a managed Postgres URL for production
+      - key: PYTHON_VERSION
+        value: "3.11.9"
